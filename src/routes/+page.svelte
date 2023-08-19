@@ -1,13 +1,12 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { closeConnection, handleWebsocket, sendMessage } from "../utils";
+    import Chat from "../components/Chat/Chat.svelte";
 
     let socket: WebSocket;
     let toggleButtonText = 'Close';
     let socketReadyStatus = 0;
     let inputValue: string = '';
-
-    $: console.log(socket)
 
     onMount(() => {
         socket = new WebSocket("ws://localhost:3000/chat")
@@ -44,3 +43,4 @@
 <input type="text" value={inputValue} on:keyup={(e) => handleInputChange(e)}>
 <button on:click={sendWsRequest}>Send</button>
 <button on:click={toggleConnection}>{toggleButtonText} connection</button>
+<Chat/>
