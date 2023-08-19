@@ -10,7 +10,7 @@
 
 <style>
     .chat-header {
-        height: 80px;
+        flex-basis: 10%;
         background-color: #3f3939;
         border-bottom: 1px solid rgb(185, 180, 180);
         display: flex;

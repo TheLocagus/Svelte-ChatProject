@@ -19,5 +19,7 @@
         width: 450px;
         border: 1px solid black;
         border-radius: 10px;
+        display: flex;
+        flex-direction: column;
     }
 </style>
