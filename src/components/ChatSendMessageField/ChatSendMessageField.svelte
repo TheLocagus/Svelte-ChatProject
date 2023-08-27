@@ -1,22 +1,71 @@
 <script lang="ts">
-    
-    const changeSize = () => {
-        const textarea = document.querySelector('textarea');
-            if (textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = `${textarea.scrollHeight}px`;
-    }}
+    import { createEventDispatcher } from "svelte";
+
+
+    let value = '';
+
+    const dispatch = createEventDispatcher()
+
+    const handleCustomTextarea = (e: Event) => {
+        const div = e.target as HTMLDivElement;
+       
+        if(!div.style.maxWidth){
+            div.style.maxWidth = div.scrollWidth.toString() + 'px';
+        }
+
+        value = div.innerText;
+    }
+
+    const handlePaste = (e: ClipboardEvent) => {
+        e.preventDefault();
+
+        const div = e.target as HTMLDivElement;
+        if(!div.style.maxWidth){
+            div.style.maxWidth = div.scrollWidth.toString() + 'px';
+        }
+
+        const clipboardData = e.clipboardData;
+        const pastedText = clipboardData?.getData('text/plain') ?? '';
+
+        const selection = window.getSelection();
+        if (!selection || !selection.rangeCount) return;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(pastedText));
+        selection.collapseToEnd();
+    }
 
 </script>
 
 <div class="chat-send-message-field">
     <div class="input-field">
-            <textarea on:input={() => changeSize()} rows={1} style="max-height: 100px"></textarea>
+        <div class="custom-textarea-wrapper">
+            <div class="custom-textarea" contenteditable=true  on:input={(e) => handleCustomTextarea(e)} on:paste={e => handlePaste(e)}/>
+        </div>
     </div>
     <div class="send-btn-field"></div>
 </div>
 
 <style>
+    .custom-textarea-wrapper {
+        width: 100%;
+        padding: 10px 10px;
+        background-color: #726a6a;
+    }
+
+    .custom-textarea {
+        max-height: 120px;
+        width: 100%;
+        background-color: #726a6a;
+        color: #E4E6EB;
+        outline: none;
+        overflow-y: auto;
+        cursor: pointer;
+    }
+
+    .custom-textarea :global(div) {
+        cursor: text;
+    }
+
     .chat-send-message-field {
         display: flex;
         background-color: #3f3939;
@@ -32,29 +81,17 @@
         padding: 15px 10px;
     }
 
-    .input-field textarea {
-        padding: 0;
-        width: 100%;
-        height: 22px;
+    .custom-textarea::-webkit-scrollbar {
+        background-color: #222;
+        width: 10px;
         border-radius: 5px;
-        border: none;
-        outline: none;
-        resize: none;
-        line-height: 22px;
-        /* overflow: hidden; */
-        
+
     }
 
-    textarea::-webkit-scrollbar {
-        background-color: aqua;
-        width: 5px;
-        position: absolute;
-    }
-
-    textarea::-webkit-scrollbar-thumb {
+    .custom-textarea::-webkit-scrollbar-thumb {
         border-radius: 5px;
-        
-        background-color: red;
+        background-color: #444;
+
 
     }
 
