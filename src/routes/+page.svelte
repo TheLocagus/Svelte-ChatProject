@@ -1,37 +1,39 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy, onMount, setContext } from "svelte";
     import { closeConnection, handleWebsocket, sendMessage } from "../utils";
     import Chat from "../components/Chat/Chat.svelte";
+    import { writable, type Writable } from "svelte/store";
 
-    let socket: WebSocket;
+    let socket: Writable<WebSocket> = writable();
     let toggleButtonText = 'Close';
     let socketReadyStatus = 0;
     let inputValue: string = '';
 
+
     onMount(() => {
-        socket = new WebSocket("ws://localhost:3000/chat")
-        handleWebsocket(socket);
+        socket.set(new WebSocket("ws://localhost:3000/chat"))
+        handleWebsocket($socket);
     })
 
-   
+    setContext('socket', socket);
 
     const handleInputChange = (e: Event) => {
         inputValue = (e.target as HTMLInputElement)?.value;
     }
 
     const sendWsRequest = () => {
-        sendMessage(socket, inputValue)
+        sendMessage($socket, inputValue)
     }
 
     const toggleConnection = () => {
         if(socketReadyStatus === 2 || socketReadyStatus === 3){
-            socket = new WebSocket("ws://localhost:3000/chat")
-            handleWebsocket(socket);
-            socketReadyStatus = socket.readyState;
+            socket.set(new WebSocket("ws://localhost:3000/chat"))
+            handleWebsocket($socket);
+            socketReadyStatus = $socket.readyState;
             toggleButtonText = 'Close';
         } else {
-            closeConnection(socket);
-            socketReadyStatus = socket.readyState;
+            closeConnection($socket);
+            socketReadyStatus = $socket.readyState;
             toggleButtonText = 'Open';
 
         }
