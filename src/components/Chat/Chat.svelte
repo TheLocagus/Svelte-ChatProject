@@ -2,6 +2,7 @@
     import ChatHeader from "../ChatHeader/ChatHeader.svelte";
     import ChatMessagesField from "../ChatMessagesField/ChatMessagesField.svelte";
     import ChatSendMessageField from "../ChatSendMessageField/ChatSendMessageField.svelte";
+    import Siema from "../ChatSendMessageField/siema.svelte";
 
 
 </script>
