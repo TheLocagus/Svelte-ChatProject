@@ -1,4 +1,9 @@
 <script lang="ts">
+    import { getContext } from "svelte";
+    import { sendMessage } from "../../utils";
+    import type { Writable } from "svelte/store";
+
+    const socket: Writable<WebSocket> = getContext('socket');
     let value = '';
 
     const handleTextarea = (e: Event) => {
@@ -15,6 +20,7 @@
         value = div.innerText;
     }
 
+
 </script>
 
 <div class="chat-send-message-field">
@@ -23,7 +29,9 @@
             <textarea  on:input={(e) => handleTextarea(e)}></textarea>
         </div>
     </div>
-    <div class="send-btn-field"></div>
+    <div class="send-btn-field">
+        <button on:click={() => sendMessage($socket, value)}>Send</button>
+    </div>
 </div>
 
 <style>
