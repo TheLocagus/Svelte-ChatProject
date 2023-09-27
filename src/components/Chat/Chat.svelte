@@ -4,12 +4,35 @@
     import ChatSendMessageField from "../ChatSendMessageField/ChatSendMessageField.svelte";
     import Siema from "../ChatSendMessageField/siema.svelte";
 
+    const messages =  [
+        {
+            id: '1',
+            author: 'User',
+            text: 'Witam.',
+            time: 1694376329000,
+            showTime: true,
+        },
+        {
+            id: '2',
+            author: 'User',
+            text: 'Odpowiedz mi na pytanie, jak robi krowa?',
+            time: 1694376329000,
+            showTime: false,
+        },
+        {
+            id: '3',
+            author: 'AI',
+            text: 'Witam. Mu mu',
+            time: 1694376329000,
+            showTime: false,
+        },
+    ]
 
 </script>
 
 <div class="chat-wrapper">
     <ChatHeader/>
-    <ChatMessagesField/>
+    <ChatMessagesField {messages}/>
     <ChatSendMessageField/>
 </div>
 

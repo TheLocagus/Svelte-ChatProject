@@ -14,8 +14,8 @@
         if(Number(div.style.height.replace('px', '')) > 120){
             div.style.overflow = 'auto';
         }
-        div.style.height = '30px';
-        div.style.height = div.scrollHeight.toString() + 'px'
+        div.style.height = 'auto';
+        div.style.height = div.scrollHeight.toString()  + 'px';
 
         value = div.innerText;
     }

@@ -46,3 +46,13 @@
 <button on:click={sendWsRequest}>Send</button>
 <button on:click={toggleConnection}>{toggleButtonText} connection</button>
 <Chat/>
+
+<style>
+    :global(*){
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    
+</style>
