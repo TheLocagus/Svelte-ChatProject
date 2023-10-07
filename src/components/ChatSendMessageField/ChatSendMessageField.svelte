@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import { sendMessage } from "../../utils";
     import type { Writable } from "svelte/store";
 
     const socket: Writable<WebSocket> = getContext('socket');
     let value = '';
+
 
     const handleTextarea = (e: Event) => {
         const div = e.target as HTMLTextAreaElement;
@@ -44,7 +45,7 @@
     textarea {
         padding: 0;
         max-height: 120px;
-        height: 30px;
+        height: 32px;
         width: 100%;
         background-color: #726a6a;
         color: #E4E6EB;

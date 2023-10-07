@@ -1,31 +1,41 @@
 <script lang="ts">
+    import type { MessageDTO } from "../../types/api";
     import ChatHeader from "../ChatHeader/ChatHeader.svelte";
     import ChatMessagesField from "../ChatMessagesField/ChatMessagesField.svelte";
     import ChatSendMessageField from "../ChatSendMessageField/ChatSendMessageField.svelte";
-    import Siema from "../ChatSendMessageField/siema.svelte";
 
-    const messages =  [
+    const messages: MessageDTO[] =  [
         {
             id: '1',
             author: 'User',
             text: 'Witam.',
             time: 1694376329000,
-            showTime: true,
         },
         {
             id: '2',
             author: 'User',
             text: 'Odpowiedz mi na pytanie, jak robi krowa?',
             time: 1694376329000,
-            showTime: false,
         },
         {
             id: '3',
             author: 'AI',
-            text: 'Witam. Mu mu',
+            text: 'Witam. Mu muWitam. Mu muWitam. Mu muWitam. Mu mu',
             time: 1694376329000,
-            showTime: false,
         },
+        {
+            id: '4',
+            author: 'AI',
+            text: 'Witam. Mu mu',
+            time: 1694376999990,
+        },
+        {
+            id: '4',
+            author: 'AI',
+            text: 'Witam. Mu mu',
+            time: 1694376999990,
+        },
+        
     ]
 
 </script>

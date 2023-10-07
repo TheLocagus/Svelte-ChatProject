@@ -3,5 +3,4 @@ export interface MessageDTO {
     author: string;
     text: string;
     time: number;
-    showTime: boolean;
 }
