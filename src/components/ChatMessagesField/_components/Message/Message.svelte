@@ -29,7 +29,7 @@ export let message: MessageDTO;
 .ai-message {
     display: flex;
     width: 100%;
-    margin-left: 5px;
+    margin-left: 2px;
 }
 
 .sent-message {
