@@ -1,64 +1,66 @@
 <script lang="ts">
-    import type { MessageDTO } from "../../types/api";
-    import Message from "./_components/Message/Message.svelte";
-    import SendTime from "./_components/SendTime/SendTime.svelte";
-    import { isAtleastFiveMinutesFromLastMessage, isAtleastFiveMinutesFromNextMessage, isNextMessageFromUser, isPreviousMessageFromOtherUser } from "./_utils/utils";
+import type { MessageDTO } from "../../types/api";
+import Message from "./_components/Message/Message.svelte";
+import SendTime from "./_components/SendTime/SendTime.svelte";
+import {
+    isAtleastFiveMinutesFromLastMessage,
+    isAtleastFiveMinutesFromNextMessage,
+    isNextMessageFromUser,
+    isPreviousMessageFromOtherUser,
+} from "./_utils/utils";
 
-    export let messages: MessageDTO[];
+export let messages: MessageDTO[];
 </script>
 
 <div class="chat-messages-field">
     <div class="separator"></div>
     {#each messages as message, i}
         {#if i === 0 || isAtleastFiveMinutesFromLastMessage(messages[i - 1].time, messages[i].time)}
-            <SendTime time={message.time} />
+            <SendTime time="{message.time}" />
         {:else if isPreviousMessageFromOtherUser(messages[i - 1].author, messages[i].author)}
             <div class="additional-space"></div>
         {/if}
         <div class="message-wrap">
             <div class="img-wrap">
-                {#if message.author === 'AI' && (i === messages.length - 1 || isNextMessageFromUser(messages[i].author, messages[i + 1].author) || isAtleastFiveMinutesFromNextMessage(messages[i].time, messages[i + 1].time)) }
-                <img src="gptlogo.png" alt="Chatgpt logo icon">
-            {/if}
+                {#if message.author === "AI" && (i === messages.length - 1 || isNextMessageFromUser(messages[i].author, messages[i + 1].author) || isAtleastFiveMinutesFromNextMessage(messages[i].time, messages[i + 1].time))}
+                    <img src="gptlogo.png" alt="Chatgpt logo icon" />
+                {/if}
             </div>
-            <Message {message}/>
+            <Message {message} />
         </div>
-        
     {/each}
-    
 </div>
 
 <style>
-    .separator {
-        flex-grow: 1;
-    }
+.separator {
+    flex-grow: 1;
+}
 
-    .additional-space {
-        margin: 2px 0;
-    }
+.additional-space {
+    margin: 2px 0;
+}
 
-    .chat-messages-field {
-        display: flex;
-        flex-direction: column;
-        color: white;
-        overflow-y: auto;
-        flex-grow: 1;
-    }
+.chat-messages-field {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    overflow-y: auto;
+    flex-grow: 1;
+}
 
-    .message-wrap{
-        display: flex;
-        align-items: flex-end;
-    }
+.message-wrap {
+    display: flex;
+    align-items: flex-end;
+}
 
-    .img-wrap {
-        width: 30px;
-    }
+.img-wrap {
+    width: 30px;
+}
 
-    img {
-        width: 20px;
-        height: 20px;
-        margin-left: 5px;
-        border-radius: 5px;
-    }
-
+img {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    border-radius: 5px;
+}
 </style>

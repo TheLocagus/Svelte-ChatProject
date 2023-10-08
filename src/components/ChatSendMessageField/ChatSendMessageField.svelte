@@ -1,86 +1,79 @@
 <script lang="ts">
-    import { getContext, onMount } from "svelte";
-    import { sendMessage } from "../../utils";
-    import type { Writable } from "svelte/store";
+import { getContext, onMount } from "svelte";
+import { sendMessage } from "../../utils";
+import type { Writable } from "svelte/store";
 
-    const socket: Writable<WebSocket> = getContext('socket');
-    let value = '';
+const socket: Writable<WebSocket> = getContext("socket");
+let value = "";
 
+const handleTextarea = (e: Event) => {
+    const div = e.target as HTMLTextAreaElement;
 
-    const handleTextarea = (e: Event) => {
-        const div = e.target as HTMLTextAreaElement;
-       
-        div.style.overflow = 'hidden';
+    div.style.overflow = "hidden";
 
-        if(Number(div.style.height.replace('px', '')) > 120){
-            div.style.overflow = 'auto';
-        }
-        div.style.height = 'auto';
-        div.style.height = div.scrollHeight.toString()  + 'px';
-
-        value = div.innerText;
+    if (Number(div.style.height.replace("px", "")) > 120) {
+        div.style.overflow = "auto";
     }
+    div.style.height = "auto";
+    div.style.height = div.scrollHeight.toString() + "px";
 
-
+    value = div.innerText;
+};
 </script>
 
 <div class="chat-send-message-field">
     <div class="input-field">
         <div class="textarea-wrapper">
-            <textarea  on:input={(e) => handleTextarea(e)}></textarea>
+            <textarea on:input="{(e) => handleTextarea(e)}"></textarea>
         </div>
     </div>
     <div class="send-btn-field">
-        <button on:click={() => sendMessage($socket, value)}>Send</button>
+        <button on:click="{() => sendMessage($socket, value)}">Send</button>
     </div>
 </div>
 
 <style>
-    .textarea-wrapper {
-        width: 100%;
-        padding: 10px 25px;
-        background-color: #726a6a;
-    }
+.textarea-wrapper {
+    width: 100%;
+    padding: 10px 25px;
+    background-color: #726a6a;
+}
 
-    textarea {
-        padding: 0;
-        max-height: 120px;
-        height: 32px;
-        width: 100%;
-        background-color: #726a6a;
-        color: #E4E6EB;
-        outline: none;
-        cursor: text;
-        resize: none;
-    }
+textarea {
+    padding: 0;
+    max-height: 120px;
+    height: 32px;
+    width: 100%;
+    background-color: #726a6a;
+    color: #e4e6eb;
+    outline: none;
+    cursor: text;
+    resize: none;
+}
 
-    .chat-send-message-field {
-        display: flex;
-        background-color: #3f3939;
-        flex-basis: 7%;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
+.chat-send-message-field {
+    display: flex;
+    background-color: #3f3939;
+    flex-basis: 7%;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
 
-    .input-field {
-        display: flex;
-        align-items: center;
-        flex-basis: 80%;
-        padding: 15px 10px;
-    }
+.input-field {
+    display: flex;
+    align-items: center;
+    flex-basis: 80%;
+    padding: 15px 10px;
+}
 
 textarea::-webkit-scrollbar {
-        background-color: #222;
-        width: 10px;
-        border-radius: 5px;
+    background-color: #222;
+    width: 10px;
+    border-radius: 5px;
+}
 
-    }
-
-    textarea::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        background-color: #444;
-
-
-    }
-
+textarea::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #444;
+}
 </style>
