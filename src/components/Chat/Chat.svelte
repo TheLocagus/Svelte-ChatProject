@@ -35,6 +35,12 @@ const messages: MessageDTO[] = [
         text: "Witam. Mu mu",
         time: 1694376999990,
     },
+    {
+        id: "42",
+        author: "User",
+        text: "Bardzo ładnie. Dziękuję!",
+        time: 1694376999990,
+    },
 ];
 </script>
 
