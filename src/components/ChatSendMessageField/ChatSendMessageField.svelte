@@ -1,7 +1,7 @@
 <script lang="ts">
-import { getContext, onMount } from "svelte";
-import { sendMessage } from "../../utils";
+import { getContext } from "svelte";
 import type { Writable } from "svelte/store";
+import { sendMessage } from "../../utils";
 
 const socket: Writable<WebSocket> = getContext("socket");
 let value = "";
@@ -27,6 +27,12 @@ const handleTextarea = (e: Event) => {
 
     value = textarea.innerText;
 };
+
+const handleSendMessage = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+        sendMessage($socket, value);
+    }
+};
 </script>
 
 <div class="chat-send-message-field">
@@ -34,11 +40,9 @@ const handleTextarea = (e: Event) => {
         <div class="textarea-wrapper">
             <textarea
                 bind:this="{textarea}"
-                on:input="{(e) => handleTextarea(e)}"></textarea>
+                on:input="{(e) => handleTextarea(e)}"
+                on:keypress="{(e) => handleSendMessage(e)}"></textarea>
         </div>
-    </div>
-    <div class="send-btn-field">
-        <button on:click="{() => sendMessage($socket, value)}">Send</button>
     </div>
 </div>
 
@@ -64,15 +68,14 @@ textarea {
 .chat-send-message-field {
     display: flex;
     background-color: #3f3939;
-    flex-basis: 7%;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 
 .input-field {
+    width: 100%;
     display: flex;
     align-items: center;
-    flex-basis: 80%;
     padding: 15px 10px;
 }
 
