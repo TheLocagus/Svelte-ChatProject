@@ -1,6 +1,6 @@
 <script lang="ts">
-import { onDestroy, onMount, setContext } from "svelte";
-import { closeConnection, handleWebsocket, sendMessage } from "../utils";
+import { onMount, setContext } from "svelte";
+import { chatHistory, closeConnection, handleWebsocket, sendMessage } from "../utils";
 import Chat from "../components/Chat/Chat.svelte";
 import { writable, type Writable } from "svelte/store";
 
@@ -36,6 +36,7 @@ const toggleConnection = () => {
         toggleButtonText = "Open";
     }
 };
+
 </script>
 
 <input
@@ -44,7 +45,7 @@ const toggleConnection = () => {
     on:keyup="{(e) => handleInputChange(e)}" />
 <button on:click="{sendWsRequest}">Send</button>
 <button on:click="{toggleConnection}">{toggleButtonText} connection</button>
-<Chat />
+<Chat messages={$chatHistory}/>
 
 <style>
 :global(*) {

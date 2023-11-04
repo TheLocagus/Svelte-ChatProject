@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { MessageDTO } from "../../types/api";
+import Loader from "../Loader/Loader.svelte";
 import Message from "./_components/Message/Message.svelte";
 import SendTime from "./_components/SendTime/SendTime.svelte";
 import {
@@ -9,12 +10,13 @@ import {
     isPreviousMessageFromOtherUser,
 } from "./_utils/utils";
 
-export let messages: MessageDTO[];
+export let messages: MessageDTO[] | undefined;
+
 </script>
 
 <div class="chat-messages-field">
     <div class="separator"></div>
-    {#if messages.length}
+    {#if messages && messages.length}
         {#each messages as message, i}
             {#if i === 0 || isAtleastFiveMinutesFromLastMessage(messages[i - 1].time, messages[i].time)}
                 <SendTime time="{message.time}" />
@@ -30,12 +32,14 @@ export let messages: MessageDTO[];
                 <Message {message} />
             </div>
         {/each}
-    {:else}
+    {:else if messages}
         <div class="welcome-message">
             <img src="gptlogo.png" alt="Chatgpt logo icon" />
             <h2>GPT 4.0</h2>
             <span>Witaj. Jestem ChatGPT 4.0, zadaj mi pytanie!</span>
         </div>
+    {:else}
+        <Loader />
     {/if}
 </div>
 
@@ -74,6 +78,7 @@ export let messages: MessageDTO[];
 }
 
 .chat-messages-field {
+    position: relative;
     display: flex;
     flex-direction: column;
     color: white;
