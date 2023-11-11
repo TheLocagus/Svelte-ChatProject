@@ -1,6 +1,11 @@
 <script lang="ts">
 import { onMount, setContext } from "svelte";
-import { chatHistory, closeConnection, handleWebsocket, sendMessage } from "../utils";
+import {
+    chatHistory,
+    closeConnection,
+    handleWebsocket,
+    sendMessage,
+} from "../utils";
 import Chat from "../components/Chat/Chat.svelte";
 import { writable, type Writable } from "svelte/store";
 
@@ -20,8 +25,8 @@ const handleInputChange = (e: Event) => {
     inputValue = (e.target as HTMLInputElement)?.value;
 };
 
-const sendWsRequest = () => {
-    sendMessage($socket, inputValue);
+const sendWsRequest = (value: string) => {
+    sendMessage($socket, value);
 };
 
 const toggleConnection = () => {
@@ -36,21 +41,24 @@ const toggleConnection = () => {
         toggleButtonText = "Open";
     }
 };
-
 </script>
 
 <input
     type="text"
     value="{inputValue}"
     on:keyup="{(e) => handleInputChange(e)}" />
-<button on:click="{sendWsRequest}">Send</button>
+<button on:click="{() => sendWsRequest(inputValue)}">Send</button>
 <button on:click="{toggleConnection}">{toggleButtonText} connection</button>
-<Chat messages={$chatHistory}/>
+<Chat messages="{$chatHistory}" />
 
 <style>
 :global(*) {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+:global(.dark-mode) {
+    background-color: #888;
 }
 </style>

@@ -11,12 +11,14 @@ let textarea: HTMLTextAreaElement;
 const INITIAL_HEIGHT = 34;
 
 const handleTextarea = (e: Event) => {
+    if (!e.target) return;
+
     textarea.style.overflow = "hidden";
 
     if (Number(textarea.scrollHeight) >= 120) {
         textarea.style.overflow = "auto";
         textarea.style.height = "120px";
-        value = textarea.innerText;
+        value = (e.target as HTMLTextAreaElement).value;
         return;
     }
     textarea.style.height = `${INITIAL_HEIGHT}px`;
@@ -25,7 +27,7 @@ const handleTextarea = (e: Event) => {
             ? textarea.offsetHeight.toString() + "px"
             : textarea.scrollHeight.toString() + "px";
 
-    value = textarea.innerText;
+    value = (e.target as HTMLTextAreaElement).value;
 };
 
 const handleSendMessage = (e: KeyboardEvent) => {

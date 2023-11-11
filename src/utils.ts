@@ -9,12 +9,18 @@ export const handleWebsocket = (socket: WebSocket) => {
     socket.onmessage = (event) => {
         console.log("Otrzymano dane:", event.data);
 
-        if(typeof get(chatHistory) === 'undefined'){
-            chatHistory.set(JSON.parse(event.data))
+        if (typeof get(chatHistory) === "undefined") {
+            chatHistory.set(JSON.parse(event.data));
         } else {
-            chatHistory.update(data => ([...data as MessageDTO[], ...JSON.parse(event.data)]))            
-        }
+            let dataFromBackend: MessageDTO = JSON.parse(event.data);
+            dataFromBackend.text = JSON.parse(dataFromBackend.text);
 
+            chatHistory.update((data) => {
+                console.log(data);
+                console.log(event.data);
+                return [...(data as MessageDTO[]), dataFromBackend];
+            });
+        }
     };
 
     socket.onclose = (event) => {
