@@ -25,6 +25,7 @@ export let message: MessageDTO;
     width: 100%;
     margin-right: 5px;
     white-space: pre-line;
+    overflow-wrap: break-word;
 }
 
 .ai-message {

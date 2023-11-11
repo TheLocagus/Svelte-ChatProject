@@ -30,9 +30,22 @@ const handleTextarea = (e: Event) => {
     value = (e.target as HTMLTextAreaElement).value;
 };
 
+const isMessageToSend = (e: KeyboardEvent) => {
+    const isMessageEmpty = (e.target as HTMLTextAreaElement).value.replaceAll(
+        "\n",
+        "",
+    ).length;
+
+    return e.key === "Enter" && e.shiftKey === false && isMessageEmpty;
+};
+
 const handleSendMessage = (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (isMessageToSend(e)) {
+        e.preventDefault();
         sendMessage($socket, value);
+        (e.target as HTMLTextAreaElement).value = "";
+        value = "";
+        textarea.style.height = `${INITIAL_HEIGHT}px`; //restore default height of textarea
     }
 };
 </script>
