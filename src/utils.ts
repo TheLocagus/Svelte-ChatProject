@@ -1,6 +1,8 @@
 import { get, writable, type Writable } from "svelte/store";
 import type { MessageDTO } from "./types/api";
 
+export let isTyping: Writable<boolean> = writable(false);
+
 export const handleWebsocket = (socket: WebSocket) => {
     socket.onopen = (event) => {
         console.log("Połączenie nawiązane.");
@@ -9,15 +11,25 @@ export const handleWebsocket = (socket: WebSocket) => {
     socket.onmessage = (event) => {
         console.log("Otrzymano dane:", event.data);
 
+        const data: [string] | MessageDTO[] = JSON.parse(event.data);
+
+        if (data.length === 1 && data[0] === "typing") {
+            isTyping.set(true);
+            return;
+        }
+
+        if (data.length === 1 && data[0] === "finished-typing") {
+            isTyping.set(false);
+            return;
+        }
+
         if (typeof get(chatHistory) === "undefined") {
-            chatHistory.set(JSON.parse(event.data));
+            chatHistory.set(data as MessageDTO[]);
         } else {
-            let dataFromBackend: MessageDTO = JSON.parse(event.data);
+            let dataFromBackend: MessageDTO = data[0] as MessageDTO;
             dataFromBackend.text = JSON.parse(dataFromBackend.text);
 
             chatHistory.update((data) => {
-                console.log(data);
-                console.log(event.data);
                 return [...(data as MessageDTO[]), dataFromBackend];
             });
         }

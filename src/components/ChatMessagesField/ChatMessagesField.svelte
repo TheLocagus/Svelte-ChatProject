@@ -1,6 +1,9 @@
 <script lang="ts">
+import { afterUpdate } from "svelte";
 import type { MessageDTO } from "../../types/api";
+import { isTyping } from "../../utils";
 import Loader from "../Loader/Loader.svelte";
+import SomeoneIsTyping from "../SomeoneIsTyping/SomeoneIsTyping.svelte";
 import Message from "./_components/Message/Message.svelte";
 import SendTime from "./_components/SendTime/SendTime.svelte";
 import {
@@ -12,9 +15,14 @@ import {
 
 export let messages: MessageDTO[] | undefined;
 
+let wrapper: HTMLDivElement;
+
+afterUpdate(() => {
+    wrapper.scrollTop = wrapper.scrollHeight;
+});
 </script>
 
-<div class="chat-messages-field">
+<div bind:this="{wrapper}" class="chat-messages-field">
     <div class="separator"></div>
     {#if messages && messages.length}
         {#each messages as message, i}
@@ -32,6 +40,9 @@ export let messages: MessageDTO[] | undefined;
                 <Message {message} />
             </div>
         {/each}
+        {#if $isTyping}
+            <SomeoneIsTyping />
+        {/if}
     {:else if messages}
         <div class="welcome-message">
             <img src="gptlogo.png" alt="Chatgpt logo icon" />
@@ -104,6 +115,7 @@ img {
 
 ::-webkit-scrollbar {
     width: 10px;
+    overflow-anchor: none;
 }
 
 ::-webkit-scrollbar-track {
