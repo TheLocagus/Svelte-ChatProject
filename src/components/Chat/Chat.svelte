@@ -4,44 +4,8 @@ import ChatHeader from "../ChatHeader/ChatHeader.svelte";
 import ChatMessagesField from "../ChatMessagesField/ChatMessagesField.svelte";
 import ChatSendMessageField from "../ChatSendMessageField/ChatSendMessageField.svelte";
 
-const messages: MessageDTO[] = [
-    {
-        id: "1",
-        author: "User",
-        text: "Witam.",
-        time: 1694376329000,
-    },
-    {
-        id: "2",
-        author: "User",
-        text: "Odpowiedz mi na pytanie, jak robi krowa?",
-        time: 1694376329000,
-    },
-    {
-        id: "3",
-        author: "AI",
-        text: "Witsdsdam. Mu muWitam. Mu muWitam. Mu muWitam. Mu mu",
-        time: 1694376329000,
-    },
-    {
-        id: "4",
-        author: "AI",
-        text: "Witam. Mu mu",
-        time: 1694376999990,
-    },
-    {
-        id: "42",
-        author: "AI",
-        text: "Witam. Mu mu",
-        time: 1694376999990,
-    },
-    {
-        id: "42",
-        author: "User",
-        text: "Bardzo ładnie. Dziękuję!",
-        time: 1694376999990,
-    },
-];
+export let messages: MessageDTO[] | undefined;
+
 </script>
 
 <div class="chat-wrapper">

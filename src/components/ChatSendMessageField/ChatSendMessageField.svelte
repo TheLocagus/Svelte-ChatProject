@@ -11,12 +11,14 @@ let textarea: HTMLTextAreaElement;
 const INITIAL_HEIGHT = 34;
 
 const handleTextarea = (e: Event) => {
+    if (!e.target) return;
+
     textarea.style.overflow = "hidden";
 
     if (Number(textarea.scrollHeight) >= 120) {
         textarea.style.overflow = "auto";
         textarea.style.height = "120px";
-        value = textarea.innerText;
+        value = (e.target as HTMLTextAreaElement).value;
         return;
     }
     textarea.style.height = `${INITIAL_HEIGHT}px`;
@@ -25,12 +27,25 @@ const handleTextarea = (e: Event) => {
             ? textarea.offsetHeight.toString() + "px"
             : textarea.scrollHeight.toString() + "px";
 
-    value = textarea.innerText;
+    value = (e.target as HTMLTextAreaElement).value;
+};
+
+const isMessageToSend = (e: KeyboardEvent) => {
+    const isMessageEmpty = (e.target as HTMLTextAreaElement).value.replaceAll(
+        "\n",
+        "",
+    ).length;
+
+    return e.key === "Enter" && e.shiftKey === false && isMessageEmpty;
 };
 
 const handleSendMessage = (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (isMessageToSend(e)) {
+        e.preventDefault();
         sendMessage($socket, value);
+        (e.target as HTMLTextAreaElement).value = "";
+        value = "";
+        textarea.style.height = `${INITIAL_HEIGHT}px`; //restore default height of textarea
     }
 };
 </script>

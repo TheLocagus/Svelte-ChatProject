@@ -1,5 +1,9 @@
 <script lang="ts">
+import { afterUpdate } from "svelte";
 import type { MessageDTO } from "../../types/api";
+import { isTyping } from "../../utils";
+import Loader from "../Loader/Loader.svelte";
+import SomeoneIsTyping from "../SomeoneIsTyping/SomeoneIsTyping.svelte";
 import Message from "./_components/Message/Message.svelte";
 import SendTime from "./_components/SendTime/SendTime.svelte";
 import {
@@ -9,12 +13,18 @@ import {
     isPreviousMessageFromOtherUser,
 } from "./_utils/utils";
 
-export let messages: MessageDTO[];
+export let messages: MessageDTO[] | undefined;
+
+let wrapper: HTMLDivElement;
+
+afterUpdate(() => {
+    wrapper.scrollTop = wrapper.scrollHeight;
+});
 </script>
 
-<div class="chat-messages-field">
+<div bind:this="{wrapper}" class="chat-messages-field">
     <div class="separator"></div>
-    {#if messages.length}
+    {#if messages && messages.length}
         {#each messages as message, i}
             {#if i === 0 || isAtleastFiveMinutesFromLastMessage(messages[i - 1].time, messages[i].time)}
                 <SendTime time="{message.time}" />
@@ -30,12 +40,17 @@ export let messages: MessageDTO[];
                 <Message {message} />
             </div>
         {/each}
-    {:else}
+        {#if $isTyping}
+            <SomeoneIsTyping />
+        {/if}
+    {:else if messages}
         <div class="welcome-message">
             <img src="gptlogo.png" alt="Chatgpt logo icon" />
             <h2>GPT 4.0</h2>
             <span>Witaj. Jestem ChatGPT 4.0, zadaj mi pytanie!</span>
         </div>
+    {:else}
+        <Loader />
     {/if}
 </div>
 
@@ -74,6 +89,7 @@ export let messages: MessageDTO[];
 }
 
 .chat-messages-field {
+    position: relative;
     display: flex;
     flex-direction: column;
     color: white;
@@ -99,6 +115,7 @@ img {
 
 ::-webkit-scrollbar {
     width: 10px;
+    overflow-anchor: none;
 }
 
 ::-webkit-scrollbar-track {
